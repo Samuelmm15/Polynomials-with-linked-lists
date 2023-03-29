@@ -10,9 +10,11 @@
 #ifndef VECTORT_H_
 #define VECTORT_H_
 
+// Inclusión de las librerías necesarias
 #include <iostream>
 #include <cassert>
 
+// Definición de la clase vector_t
 template<class T> class vector_t {
  public:
   // constructores

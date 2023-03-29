@@ -10,6 +10,7 @@
 #ifndef SLLT_H_
 #define SLLT_H_
 
+// Inclusión de las librerías necesarias
 #include <iostream>
 #include <cassert>
 

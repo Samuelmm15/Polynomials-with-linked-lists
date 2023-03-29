@@ -10,6 +10,7 @@
 #ifndef SLLPOLYNOMIAL_H_
 #define SLLPOLYNOMIAL_H_
 
+// Inclusión de las librerías necesarias
 #include <iostream>
 #include <math.h>  // fabs, pow
 
@@ -49,8 +50,17 @@ bool IsNotZero(const double val, const double eps = EPS) {
 // FASE II
 // constructor
 SllPolynomial::SllPolynomial(const vector_t<double>& v, const double eps) {
-  // poner el código aquí
-  
+  for (int i = 0; i < v.get_size(); i++) {
+    if (IsNotZero(v[i], eps)) {
+      // Creamos un par de valores (valor, índice)
+      pair_double_t pair;
+      pair.set(v[i], i);
+      // Creamos un nodo con el par
+      SllPolyNode* aux = new SllPolyNode(pair);
+      // Insertamos el nodo en la lista
+      push_front(aux);
+    }
+  }
 }
 
 

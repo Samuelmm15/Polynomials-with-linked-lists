@@ -11,9 +11,11 @@
 #ifndef PAIRT_H_
 #define PAIRT_H_
 
+// Inclusión de las librerías necesarias
 #include <iostream>
 
 
+// Definición de la clase pair_t
 template<class T> class pair_t {
  public:
   // constructores
