@@ -97,8 +97,9 @@ std::ostream& operator<<(std::ostream& os, const SllPolynomial& p) {
 // Evaluación de un polinomio representado por lista simple
 double SllPolynomial::Eval(const double x) const {
   double result{0.0};
-  // poner el código aquí
-  
+  for (SllPolyNode* aux{get_head()}; aux != NULL; aux = aux->get_next()) {
+    result += aux->get_data().get_val() * pow(x, aux->get_data().get_inx());
+  }
   return result;
 }
 
@@ -106,8 +107,14 @@ double SllPolynomial::Eval(const double x) const {
 bool SllPolynomial::IsEqual(const SllPolynomial& sllpol,
 			    const double eps) const {
   bool differents = false;
-  // poner el código aquí
-
+  SllPolyNode* aux1{get_head()};
+  SllPolyNode* aux2{sllpol.get_head()};
+  while (aux1 != NULL && aux2 != NULL && !differents) {
+    differents = (aux1->get_data().get_inx() != aux2->get_data().get_inx()) ||
+     (fabs(aux1->get_data().get_val() - aux2->get_data().get_val()) > eps);
+    aux1 = aux1->get_next();
+    aux2 = aux2->get_next();
+  }
   return !differents;
 }
 
@@ -116,8 +123,34 @@ bool SllPolynomial::IsEqual(const SllPolynomial& sllpol,
 void SllPolynomial::Sum(const SllPolynomial& sllpol,
 			SllPolynomial& sllpolsum,
 			const double eps) {
-  // poner el código aquí
-
+  SllPolyNode* aux1{get_head()};
+  SllPolyNode* aux2{sllpol.get_head()};
+  while (aux1 != NULL && aux2 != NULL) {
+    if (aux1->get_data().get_inx() == aux2->get_data().get_inx()) {
+      if (IsNotZero(aux1->get_data().get_val() + aux2->get_data().get_val(),
+        eps)) {
+        pair_double_t pair;
+        pair.set(aux1->get_data().get_val() + aux2->get_data().get_val(),
+          aux1->get_data().get_inx());
+        SllPolyNode* aux = new SllPolyNode(pair);
+        sllpolsum.push_front(aux);
+        }
+      aux1 = aux1->get_next();
+      aux2 = aux2->get_next();
+    } else if (aux1->get_data().get_inx() > aux2->get_data().get_inx()) {
+      pair_double_t pair;
+      pair.set(aux1->get_data().get_val(), aux1->get_data().get_inx());
+      SllPolyNode* aux = new SllPolyNode(pair);
+      sllpolsum.push_front(aux);
+      aux1 = aux1->get_next();
+    } else {
+      pair_double_t pair;
+      pair.set(aux2->get_data().get_val(), aux2->get_data().get_inx());
+      SllPolyNode* aux = new SllPolyNode(pair);
+      sllpolsum.push_front(aux);
+      aux2 = aux2->get_next();
+    } 
+  }
 }
 
 
