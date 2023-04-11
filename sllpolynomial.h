@@ -50,7 +50,10 @@ bool IsNotZero(const double val, const double eps = EPS) {
 // FASE II
 // constructor
 SllPolynomial::SllPolynomial(const vector_t<double>& v, const double eps) {
-  for (int i = 0; i < v.get_size(); i++) {
+  // NOTA: Debido a que únicamente existe el método de push_front() y no de push_back(),
+  //       se recorre el vector de forma inversa para que el polinomio se construya
+  //       correctamente.
+  for (int i = v.get_size() - 1; i >= 0; i--) {
     if (IsNotZero(v[i], eps)) {
       // Creamos un par de valores (valor, índice)
       pair_double_t pair;
@@ -125,31 +128,53 @@ void SllPolynomial::Sum(const SllPolynomial& sllpol,
 			const double eps) {
   SllPolyNode* aux1{get_head()};
   SllPolyNode* aux2{sllpol.get_head()};
+
   while (aux1 != NULL && aux2 != NULL) {
     if (aux1->get_data().get_inx() == aux2->get_data().get_inx()) {
       if (IsNotZero(aux1->get_data().get_val() + aux2->get_data().get_val(),
-        eps)) {
+                    eps)) {
         pair_double_t pair;
         pair.set(aux1->get_data().get_val() + aux2->get_data().get_val(),
-          aux1->get_data().get_inx());
-        SllPolyNode* aux = new SllPolyNode(pair);
+                 aux1->get_data().get_inx());
+        SllPolyNode *aux = new SllPolyNode(pair);
         sllpolsum.push_front(aux);
-        }
-      aux1 = aux1->get_next();
-      aux2 = aux2->get_next();
-    } else if (aux1->get_data().get_inx() > aux2->get_data().get_inx()) {
+      }
+    }
+    if (aux1->get_data().get_inx() < aux2->get_data().get_inx()) {
       pair_double_t pair;
       pair.set(aux1->get_data().get_val(), aux1->get_data().get_inx());
-      SllPolyNode* aux = new SllPolyNode(pair);
+      SllPolyNode *aux = new SllPolyNode(pair);
       sllpolsum.push_front(aux);
-      aux1 = aux1->get_next();
-    } else {
+    }
+    if (aux2->get_data().get_inx() < aux1->get_data().get_inx()) {
       pair_double_t pair;
       pair.set(aux2->get_data().get_val(), aux2->get_data().get_inx());
-      SllPolyNode* aux = new SllPolyNode(pair);
+      SllPolyNode *aux = new SllPolyNode(pair);
+      sllpolsum.push_front(aux);
+    }
+
+    if (aux1->get_data().get_inx() == aux2->get_data().get_inx()) {
+      aux1 = aux1->get_next();
+      aux2 = aux2->get_next();
+    } else if (aux1->get_data().get_inx() < aux2->get_data().get_inx()) {
+      aux1 = aux1->get_next();
+    } else if (aux2->get_data().get_inx() < aux1->get_data().get_inx()) {
+      aux2 = aux2->get_next();
+    }
+
+    if (aux1 == NULL && aux2 != NULL) {
+      pair_double_t pair;
+      pair.set(aux2->get_data().get_val(), aux2->get_data().get_inx());
+      SllPolyNode *aux = new SllPolyNode(pair);
       sllpolsum.push_front(aux);
       aux2 = aux2->get_next();
-    } 
+    } else if (aux2 == NULL && aux1 != NULL) {
+      pair_double_t pair;
+      pair.set(aux1->get_data().get_val(), aux1->get_data().get_inx());
+      SllPolyNode *aux = new SllPolyNode(pair);
+      sllpolsum.push_front(aux);
+      aux1 = aux1->get_next();
+    }
   }
 }
 
