@@ -72,5 +72,11 @@ int main()
   sllp2.Sum(sllp3, sllpsum23);
   cout << "sllp2 + sllp3= " << sllpsum23;
 
+  // Implementación de la modificación
+     SllPolynomial sllpeliminatedegree;
+     sllpeliminatedegree.EliminateDegree(8, sllp1);
+     cout << endl;
+     cout << "Implementación de la modificación" << endl;
+     cout << "sllp1 eliminando el grado 8= " << sllpeliminatedegree;
   return 0;
 }

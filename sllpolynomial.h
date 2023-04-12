@@ -40,6 +40,7 @@ class SllPolynomial : public sll_t<pair_double_t> {
   double Eval(const double) const;
   bool IsEqual(const SllPolynomial&, const double = EPS) const;
   void Sum(const SllPolynomial&, SllPolynomial&, const double = EPS);
+  void EliminateDegree(const int degree, const SllPolynomial&);
 };
 
 
@@ -175,6 +176,21 @@ void SllPolynomial::Sum(const SllPolynomial& sllpol,
       sllpolsum.push_front(aux);
       aux1 = aux1->get_next();
     }
+  }
+}
+
+// MODIFICACIÓN
+// Generar un polinomio producto que elimina los monomios que tengan el grado el cual se le pasa como parámetro
+void SllPolynomial::EliminateDegree(const int degree, const SllPolynomial& sllpol) {
+  SllPolyNode* aux{sllpol.get_head()};
+  while (aux != NULL) {
+    if (aux->get_data().get_inx() != degree) {
+      pair_double_t pair;
+      pair.set(aux->get_data().get_val(), aux->get_data().get_inx());
+      SllPolyNode *aux2 = new SllPolyNode(pair);
+      push_front(aux2);
+    }
+    aux = aux->get_next();
   }
 }
 
